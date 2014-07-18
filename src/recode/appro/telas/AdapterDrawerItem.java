@@ -10,11 +10,11 @@ import android.widget.TextView;
 public class AdapterDrawerItem extends BaseExpandableListAdapter {
 
 	String[] listaPai = {"O Pólo","Calendários","Cursos","Departamentos",
-							"Notícias","Professores"};
+							"Notícias","Professores","Eventos"};
 	String[][] listaFilho = {{},{}, 
 							{"Ciência da Computação","Enfermagem","Engenharia de Produção", 
     						"Produção Cultural","Psicologia","Serviço Social"},
-    						{"ICT","IHS","RAE","RCT", "RFM", "RIR"},{},{},};
+    						{"ICT","IHS","RAE","RCT", "RFM", "RIR"},{},{},{}};
 	Context context;
 	
 	public AdapterDrawerItem(Context context) {

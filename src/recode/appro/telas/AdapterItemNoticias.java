@@ -5,6 +5,7 @@ import java.util.List;
 import recode.appro.controlador.ControladorNoticia;
 import recode.appro.model.Noticia;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,7 +61,7 @@ public class AdapterItemNoticias extends BaseAdapter {
 		data.setText(noticias.get(position).getDataexpedida());
 		hora.setText(noticias.get(position).getHoraexpedida());
 
-		return view;
+        return view;
 	}
 
 }

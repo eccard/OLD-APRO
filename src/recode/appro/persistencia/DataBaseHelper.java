@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import recode.appro.model.Departamento;
 import recode.appro.model.Disciplina;
+import recode.appro.model.Evento;
 import recode.appro.model.Noticia;
 import recode.appro.model.Professor;
 import android.content.Context;
@@ -16,14 +17,16 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
 
 	// Declaração do diretório e nome do arquivo do banco de dados.
 	private static String DB_PATH = "/data/data/recode.appro.telas/databases/";
-	private static String DB_NAME = "PUROapp_Updated.db";
-	public SQLiteDatabase dbQuery;
-	private final Context dbContexto;
+//    private static String DB_NAME = "PUROapp_Updated.db";
+    private static String DB_NAME = "PUROapp_Updated-1.db";
+    public SQLiteDatabase dbQuery;
+    private final Context dbContexto;
 
 	public DataBaseHelper(Context context) {
 		super(context, DB_NAME, null, 1);
@@ -129,7 +132,30 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		}
 		return noticias;
 	}
+    public ArrayList<Evento> getEventos(){
+        ArrayList<Evento> eventos = new ArrayList<Evento>();
 
+        Cursor cursor = dbQuery.rawQuery("select * from evento", null);
+        // codigo,assunto,dataExpedida,horaExpedida,cursoRelacionado,descricao
+        // cod,nome,descricao,organizadores,local,data,hora,confirmados
+        if (cursor.moveToFirst()) {
+            do {
+
+                eventos.add(new Evento(cursor.getInt(0), cursor.getString(1),
+                        cursor.getString(2), cursor.getString(3), cursor
+                        .getString(4), cursor.getString(5),cursor.getString(6)
+                ));
+            } while (cursor.moveToNext());
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+        }
+
+//        for(int i=0; i<eventos.size();i++){
+//            Log.i("eventos",eventos.get(i).getNome());
+//        }
+        return eventos;
+    }
 	public ArrayList<String> getCursoInformacoes(int codigo) {
 
 		ArrayList<String> infocurso = new ArrayList<String>();
