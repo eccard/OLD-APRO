@@ -1,8 +1,10 @@
 package recode.appro.telas;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import recode.appro.controlador.ControladorNoticia;
+import recode.appro.model.Evento;
 import recode.appro.model.Noticia;
 import android.content.Context;
 import android.util.Log;
@@ -18,7 +20,7 @@ public class AdapterItemNoticias extends BaseAdapter {
 	List<Noticia> noticias;
 	ControladorNoticia controladorNoticia;
 	
-	public AdapterItemNoticias(List<Noticia> noticias, Context context) {
+	public AdapterItemNoticias( Context context) {
 		
 		this.context = context;
 		this.controladorNoticia = new ControladorNoticia(context);
@@ -63,5 +65,15 @@ public class AdapterItemNoticias extends BaseAdapter {
 
         return view;
 	}
+    public void concatenarArrayDeNoticias(ArrayList<Noticia> lista2){
 
+//        for(int i=0;i<lista2.size();i++){
+//            this.eventos.add(lista2.get(i));
+//        }
+
+        for (int i=0;i<this.noticias.size();i++){
+            lista2.add(this.noticias.get(i));
+        }
+        this.noticias=lista2;
+    }
 }

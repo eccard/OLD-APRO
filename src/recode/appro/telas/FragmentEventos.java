@@ -76,7 +76,7 @@ public class FragmentEventos extends Fragment {
                 container, false);
 
         // Hashmap for ListView
-        eventosList = new ArrayList<HashMap<String, String>>();
+//        eventosList = new ArrayList<HashMap<String, String>>();
 
         // Loading products in Background Thread
         new LoadAllProducts().execute();

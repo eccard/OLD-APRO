@@ -370,6 +370,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         cursor.moveToFirst();
         return cursor.getInt(0);
     }
+    public int getCodigoUltimaNoticia(){
+        Cursor cursor = dbQuery.rawQuery("SELECT MAX(codigo) FROM noticias",null);
+        cursor.moveToFirst();
+        return cursor.getInt(0);
+    }
 
 	/*
 	 * public ArrayList<Noticia> getSpecificNoticias(int codigoNoticia) {

@@ -51,6 +51,11 @@ public class ControladorNoticia {
 		
 		return listaNoticias;
 	}
+    public int getCodigoUltimaNoticia(){
+        abrirBanco();
+        return dataBaseHelper.getCodigoUltimaNoticia();
+
+    }
 	
 	
 }
