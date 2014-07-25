@@ -24,7 +24,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 	// Declaração do diretório e nome do arquivo do banco de dados.
 	private static String DB_PATH = "/data/data/recode.appro.telas/databases/";
 //    private static String DB_NAME = "PUROapp_Updated.db";
-    private static String DB_NAME = "PUROapp_Updated-1.db";
+//    private static String DB_NAME = "PUROapp_Updated-1.db";
+    private static String DB_NAME = "PUROapp_Updated-1.1.db";
     public SQLiteDatabase dbQuery;
     private final Context dbContexto;
 
@@ -363,7 +364,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		        }
 		    return nomesProfessores; 
 		}
-	
+
+    public int getCodigoUltimoEvento(){
+        Cursor cursor = dbQuery.rawQuery("SELECT MAX(cod) FROM evento",null);
+        cursor.moveToFirst();
+        return cursor.getInt(0);
+    }
+
 	/*
 	 * public ArrayList<Noticia> getSpecificNoticias(int codigoNoticia) {
 	 * 

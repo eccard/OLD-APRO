@@ -52,5 +52,11 @@ public class ControladorEvento {
 
         return listaEventos;
     }
+    public int getCodigoUltimoEvento(){
+        abrirBanco();
+        return dataBaseHelper.getCodigoUltimoEvento();
+
+    }
+
 
 }

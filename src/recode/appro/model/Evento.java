@@ -4,7 +4,7 @@ package recode.appro.model;
  * Created by eccard on 09/07/14.
  */
 public class Evento {
-    private int codigo, confirmados;
+    private int codigo, presenca;
     private String nome, descricao, organizadores, local, data, hora;
 
     public Evento(int codigo, String nome, String descricao, String organizadores, String local, String data, String hora) {
@@ -15,7 +15,7 @@ public class Evento {
         this.local = local;
         this.hora = hora;
         this.data = data;
-        this.confirmados=0;
+        this.presenca=0;
     }
 
     public int getCodigo() {
@@ -26,13 +26,6 @@ public class Evento {
         this.codigo = codigo;
     }
 
-    public int getConfirmados() {
-        return confirmados;
-    }
-
-    public void setConfirmados(int confirmados) {
-        this.confirmados = confirmados;
-    }
 
     public String getNome() {
         return nome;

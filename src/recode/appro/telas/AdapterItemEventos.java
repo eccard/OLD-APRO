@@ -24,7 +24,7 @@ public class AdapterItemEventos extends BaseAdapter {
     List<Evento> eventos;
     ControladorEvento controladorEvento;
 
-    public AdapterItemEventos(List<Evento> eventos,Context context) {
+    public AdapterItemEventos(Context context) {
         this.context = context;
         this.controladorEvento= new ControladorEvento(context);
         this.eventos = controladorEvento.getEventos();
@@ -66,5 +66,16 @@ public class AdapterItemEventos extends BaseAdapter {
         hora.setText(eventos.get(position).getHora());
 
         return view;
+    }
+    public void concatenarArrayDeEventos(ArrayList<Evento> lista2){
+
+//        for(int i=0;i<lista2.size();i++){
+//            this.eventos.add(lista2.get(i));
+//        }
+
+        for (int i=0;i<this.eventos.size();i++){
+            lista2.add(this.eventos.get(i));
+        }
+        this.eventos=lista2;
     }
 }
