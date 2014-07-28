@@ -7,6 +7,7 @@ import recode.appro.controlador.ControladorNoticia;
 import recode.appro.model.Evento;
 import recode.appro.model.Noticia;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,14 +18,17 @@ import android.widget.TextView;
 public class AdapterItemNoticias extends BaseAdapter {
 
 	Context context;
-	List<Noticia> noticias;
+	List<Noticia> noticias = new ArrayList<Noticia>();
 	ControladorNoticia controladorNoticia;
 	
 	public AdapterItemNoticias( Context context) {
 		
 		this.context = context;
 		this.controladorNoticia = new ControladorNoticia(context);
-		this.noticias = controladorNoticia.getNoticias();
+		if(noticias.size()==0){
+            this.noticias = controladorNoticia.getNoticias();
+
+        }
 	}
 	
 	@Override
@@ -54,6 +58,7 @@ public class AdapterItemNoticias extends BaseAdapter {
 		if(position%2 == 0){
 			view.setBackgroundResource(R.color.White);
 		}
+
 		
 		TextView assunto = (TextView) view.findViewById(R.id.textview_noticia);
 		TextView data = (TextView) view.findViewById(R.id.textview_noticia_data);
@@ -62,6 +67,10 @@ public class AdapterItemNoticias extends BaseAdapter {
 	    assunto.setText(noticias.get(position).getAssunto());
 		data.setText(noticias.get(position).getDataexpedida());
 		hora.setText(noticias.get(position).getHoraexpedida());
+
+        if(noticias.get(position).getVisualizar()==0){
+            assunto.setTextColor(Color.BLUE);
+        }
 
         return view;
 	}
@@ -75,5 +84,9 @@ public class AdapterItemNoticias extends BaseAdapter {
             lista2.add(this.noticias.get(i));
         }
         this.noticias=lista2;
+    }
+
+    public List<Noticia> getNoticias() {
+        return noticias;
     }
 }

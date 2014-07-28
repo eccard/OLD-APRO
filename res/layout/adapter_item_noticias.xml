@@ -37,7 +37,7 @@
         android:text="TextView" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textView_evento_data_hora"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/textview_noticia_data"
@@ -50,9 +50,9 @@
         android:id="@+id/textView_noticia_hora"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView2"
-        android:layout_alignBottom="@+id/textView2"
-        android:layout_toRightOf="@+id/textView2"
+        android:layout_alignBaseline="@+id/textView_evento_data_hora"
+        android:layout_alignBottom="@+id/textView_evento_data_hora"
+        android:layout_toRightOf="@+id/textView_evento_data_hora"
         android:text="TextView" />
 
 </RelativeLayout>

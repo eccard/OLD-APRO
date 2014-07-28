@@ -1,9 +1,11 @@
 package recode.appro.model;
 
+import java.io.Serializable;
+
 /**
  * Created by eccard on 09/07/14.
  */
-public class Evento {
+public class Evento implements Serializable{
     private int codigo, presenca;
     private String nome, descricao, organizadores, local, data, hora;
 
@@ -16,6 +18,17 @@ public class Evento {
         this.hora = hora;
         this.data = data;
         this.presenca=0;
+    }
+
+    public Evento(int codigo, String nome, String descricao, String organizadores, String local, String data, String hora,int presenca) {
+        this.codigo = codigo;
+        this.nome = nome;
+        this.descricao = descricao;
+        this.organizadores = organizadores;
+        this.local = local;
+        this.hora = hora;
+        this.data = data;
+        this.presenca=presenca;
     }
 
     public int getCodigo() {
@@ -76,4 +89,11 @@ public class Evento {
     }
 
 
+    public int getPresenca() {
+        return presenca;
+    }
+
+    public void setPresenca(int presenca) {
+        this.presenca = presenca;
+    }
 }

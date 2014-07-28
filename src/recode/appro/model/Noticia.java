@@ -1,8 +1,10 @@
 package recode.appro.model;
 
-public class Noticia {
+import java.io.Serializable;
 
-	private int codigo, cursorelacionado;
+public class Noticia implements Serializable {
+
+	private int codigo, cursorelacionado,visualizar;
 	private String assunto, dataexpedida, horaexpedida, descricao;
 
 	public Noticia(int codigo, String assunto, String dataexpedida,
@@ -16,7 +18,19 @@ public class Noticia {
 		this.descricao = descricao;
 	}
 
-	public int getCodigo() {
+    public Noticia(int codigo, String assunto, String dataexpedida,
+                   String horaexpedida, int cursorelacionado, String descricao,int visualizar) {
+        super();
+        this.codigo = codigo;
+        this.cursorelacionado = cursorelacionado;
+        this.assunto = assunto;
+        this.dataexpedida = dataexpedida;
+        this.horaexpedida = horaexpedida;
+        this.descricao = descricao;
+        this.visualizar = visualizar;
+    }
+
+    public int getCodigo() {
 		return codigo;
 	}
 
@@ -64,4 +78,11 @@ public class Noticia {
 		this.descricao = descricao;
 	}
 
+    public int getVisualizar() {
+        return visualizar;
+    }
+
+    public void setVisualizar(int visualizar) {
+        this.visualizar = visualizar;
+    }
 }

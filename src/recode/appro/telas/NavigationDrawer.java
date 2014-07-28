@@ -1,17 +1,25 @@
 package recode.appro.telas;
 
 import android.app.ActionBar;
+import android.app.NotificationManager;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
+
+import recode.appro.controlador.ControladorEvento;
+import recode.appro.controlador.ControladorNoticia;
+import recode.appro.model.Evento;
+import recode.appro.model.Noticia;
 
 public class NavigationDrawer extends FragmentActivity implements
         OnGroupClickListener, OnChildClickListener {
@@ -66,19 +74,80 @@ public class NavigationDrawer extends FragmentActivity implements
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         Fragment fragment = null;
+        // inicio para capturar a acao da intencao para as notificacoes
+        Intent intent = getIntent();
+        try {
+            String action = intent.getAction().toUpperCase();
+            if(action!=null){
+                Log.i("entrou na acçao","ennnntroouuu  " + action );
 
-        if (savedInstanceState == null) {
+                if(action.equalsIgnoreCase("NOTICIA")){
+                    ControladorNoticia controladorNoticia = new ControladorNoticia(getApplicationContext());
 
-            fragment = new FragmentNoticias();
-            getActionBar().removeAllTabs();
-            getActionBar()
-                    .setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+                    Noticia noticia = (Noticia) intent.getSerializableExtra("noticia");
+                    controladorNoticia.setVisualizarNoticia1(noticia.getCodigo());
+
+                    Log.i("noticia infos",noticia.getAssunto() + noticia.getDescricao());
+                    Log.i("que porra e eassa","paaapaaaa");
+                     NotificationManager mNotificationManager = (NotificationManager) getApplication()
+                             .getSystemService(getApplication().NOTIFICATION_SERVICE);
+
+                    mNotificationManager.cancel(noticia.getCodigo());
+
+                    fragment = new FragmentNoticia(noticia);
+                    android.support.v4.app.FragmentManager frgManager = getSupportFragmentManager();
+                    frgManager.beginTransaction().replace(R.id.content_frame, fragment)
+                            .commit();
+                    mDrawerLayout.closeDrawer(mDrawerList);
+                    Log.i(" 111111111111","1111111111");
+                }
+                if(action.equalsIgnoreCase("EVENTO")){
+//                    ControladorEvento controladorEvento = new ControladorEvento(getApplicationContext());
+
+                    Evento evento = (Evento) intent.getSerializableExtra("evento");
+                    Log.i("evento infos",evento.getNome() + evento.getDescricao());
+
+                    NotificationManager mNotificationManager = (NotificationManager) getApplication()
+                            .getSystemService(getApplication().NOTIFICATION_SERVICE);
+
+                    mNotificationManager.cancel(evento.getCodigo());
+
+                    fragment = new FragmentEvento(evento);
+                    android.support.v4.app.FragmentManager frgManager = getSupportFragmentManager();
+                    frgManager.beginTransaction().replace(R.id.content_frame, fragment)
+                            .commit();
+                    mDrawerLayout.closeDrawer(mDrawerList);
+
+                }
+                if (action.equalsIgnoreCase("ANDROID.INTENT.ACTION.MAIN")){
+                    if (savedInstanceState == null) {
+                        // e
+                        Log.i("entrano em noticias", "entrando em noticias");
+                        fragment = new FragmentNoticias();
+                        getActionBar().removeAllTabs();
+                        getActionBar()
+                                .setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+
+
+                        android.support.v4.app.FragmentManager frgManager = getSupportFragmentManager();
+                        frgManager.beginTransaction().replace(R.id.content_frame, fragment)
+                                .commit();
+                        mDrawerLayout.closeDrawer(mDrawerList);
+                    }
+                }
+            }
+            else{
+                Log.i("action == null","action == null");
+
+            }
+        }catch (Exception e){
+            Log.e("NavigationDrawer ", "Problem consuming action from intent", e);
         }
 
-        android.support.v4.app.FragmentManager frgManager = getSupportFragmentManager();
-        frgManager.beginTransaction().replace(R.id.content_frame, fragment)
-                .commit();
-        mDrawerLayout.closeDrawer(mDrawerList);
+
+        // final para capturar a acao da intencao para as notificacoes
+
+
     }
 
     @Override

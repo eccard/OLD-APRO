@@ -56,6 +56,18 @@ public class ControladorNoticia {
         return dataBaseHelper.getCodigoUltimaNoticia();
 
     }
-	
-	
+    public int getVisualizarNoticia(int codigo){
+        abrirBanco();
+        return dataBaseHelper.getVisualizarNoticia(codigo);
+    }
+
+    public void setVisualizarNoticia1(int codigo){
+        abrirBanco();
+        dataBaseHelper.setVisualizarNoticia1(codigo);
+
+    }
+    public void criarNoticia(Noticia noticia){
+        abrirBanco();
+        dataBaseHelper.criatNoticia(noticia);
+    }
 }

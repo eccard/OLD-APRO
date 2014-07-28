@@ -22,7 +22,7 @@ public class FragmentUniversidadeInfo extends Fragment implements View.OnClickLi
 		View view = inflater.inflate(R.layout.fragment_universidade_informacoes, container,
 				false);
         Button mapa1 = (Button) view.findViewById(R.id.button1);
-        Button mapa2 = (Button) view.findViewById(R.id.button2);
+        Button mapa2 = (Button) view.findViewById(R.id.button_evento_atualizarConfirmados);
 
         mapa1.setOnClickListener(this);
         mapa2.setOnClickListener(this);
@@ -39,7 +39,7 @@ public class FragmentUniversidadeInfo extends Fragment implements View.OnClickLi
                 Log.i("teste", "botão 1");
                 break;
 
-            case R.id.button2:
+            case R.id.button_evento_atualizarConfirmados:
                 Intent mapa2 =  new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.mapasalandar2)));
                 startActivity(mapa2);
                 Log.i("teste", "botão 2");

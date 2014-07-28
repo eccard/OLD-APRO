@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import recode.appro.controlador.ControladorEvento;
-import recode.appro.controlador.ControladorNoticia;
 import recode.appro.model.Evento;
 
 /**
@@ -21,13 +20,16 @@ import recode.appro.model.Evento;
 public class AdapterItemEventos extends BaseAdapter {
     Context context;
 //    ArrayList<Evento> eventos;
-    List<Evento> eventos;
-    ControladorEvento controladorEvento;
+    List<Evento> eventos = new ArrayList<Evento>();
+    ControladorEvento controladorEvento ;
 
     public AdapterItemEventos(Context context) {
         this.context = context;
         this.controladorEvento= new ControladorEvento(context);
-        this.eventos = controladorEvento.getEventos();
+
+        if(eventos.size()==0){
+        this.eventos= controladorEvento.getEventos();
+        }
 
     }
 
@@ -77,5 +79,9 @@ public class AdapterItemEventos extends BaseAdapter {
             lista2.add(this.eventos.get(i));
         }
         this.eventos=lista2;
+    }
+
+    public List<Evento> getEventos() {
+        return eventos;
     }
 }

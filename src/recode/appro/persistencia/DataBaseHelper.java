@@ -11,6 +11,8 @@ import recode.appro.model.Disciplina;
 import recode.appro.model.Evento;
 import recode.appro.model.Noticia;
 import recode.appro.model.Professor;
+
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -25,7 +27,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 	private static String DB_PATH = "/data/data/recode.appro.telas/databases/";
 //    private static String DB_NAME = "PUROapp_Updated.db";
 //    private static String DB_NAME = "PUROapp_Updated-1.db";
-    private static String DB_NAME = "PUROapp_Updated-1.1.db";
+//    private static String DB_NAME = "PUROapp_Updated-1.1.db";
+//    private static String DB_NAME = "PUROapp_Updated-1.2.db";
+    private static String DB_NAME = "PUROapp_Updated-1.3.db";
     public SQLiteDatabase dbQuery;
     private final Context dbContexto;
 
@@ -125,7 +129,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 			do {
 				noticias.add(new Noticia(cursor.getInt(0), cursor.getString(1),
 						cursor.getString(2), cursor.getString(3), cursor
-								.getInt(4), cursor.getString(5)));
+								.getInt(4), cursor.getString(5),cursor.getInt(6)));
 			} while (cursor.moveToNext());
 			if (cursor != null && !cursor.isClosed()) {
 				cursor.close();
@@ -144,7 +148,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
                 eventos.add(new Evento(cursor.getInt(0), cursor.getString(1),
                         cursor.getString(2), cursor.getString(3), cursor
-                        .getString(4), cursor.getString(5),cursor.getString(6)
+                        .getString(4), cursor.getString(5),cursor.getString(6),cursor.getInt(7)
                 ));
             } while (cursor.moveToNext());
             if (cursor != null && !cursor.isClosed()) {
@@ -374,6 +378,55 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         Cursor cursor = dbQuery.rawQuery("SELECT MAX(codigo) FROM noticias",null);
         cursor.moveToFirst();
         return cursor.getInt(0);
+    }
+
+    public int getVisualizarNoticia(int codigo){
+        String[] whereArgs = new String[] { String.valueOf(codigo)};
+        Cursor cursor = dbQuery.rawQuery("SELECT visualizar FROM noticias where codigo = ?",whereArgs);
+        cursor.moveToFirst();
+        return cursor.getInt(0);
+    }
+
+    public void setVisualizarNoticia1(int codigo){
+        dbQuery.execSQL("UPDATE noticias SET visualizar = '1' where codigo =" + String.valueOf(codigo));
+    }
+    public void criatNoticia(Noticia noticia){
+          Log.i("entrando no criarção da noticia","entrando criação noticiaaaaaaaaaaaaaaaa");
+        this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("codigo",noticia.getCodigo());
+        values.put("assunto",noticia.getAssunto());
+        values.put("dataExpedida",noticia.getDataexpedida());
+        values.put("horaExpedida",noticia.getHoraexpedida());
+        values.put("cursoRelacionado",noticia.getCursorelacionado());
+        values.put("descricao",noticia.getDescricao());
+        values.put("visualizar",noticia.getVisualizar());
+        try{
+            dbQuery.insert("noticias",null,values);
+        }catch (SQLException e){
+            Log.i(e.toString(),e.toString());
+        }
+    }
+
+    public void criarEvento(Evento evento){
+        Log.i("entrando no criarção da noticia","entrando criação noticiaaaaaaaaaaaaaaaa");
+        this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("cod",evento.getCodigo());
+        values.put("nome",evento.getNome());
+        values.put("descricao",evento.getDescricao());
+        values.put("organizadores",evento.getOrganizadores());
+        values.put("local",evento.getLocal());
+        values.put("data",evento.getData());
+        values.put("hora",evento.getHora());
+        values.put("presenca",evento.getPresenca());
+        try{
+            dbQuery.insert("evento",null,values);
+        }catch (SQLException e){
+            Log.i(e.toString(),e.toString());
+        }
     }
 
 	/*

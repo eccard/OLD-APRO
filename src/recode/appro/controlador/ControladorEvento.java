@@ -57,6 +57,9 @@ public class ControladorEvento {
         return dataBaseHelper.getCodigoUltimoEvento();
 
     }
-
+    public void criarEvento(Evento evento){
+        abrirBanco();
+        dataBaseHelper.criarEvento(evento);
+    }
 
 }

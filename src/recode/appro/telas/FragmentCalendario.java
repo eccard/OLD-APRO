@@ -23,7 +23,7 @@ public class FragmentCalendario extends Fragment implements  View.OnClickListene
 				false);
 
 		Button calendarioEscolar = (Button) view.findViewById(R.id.button1);
-		Button calendarioAdministrativo = (Button) view.findViewById(R.id.button2);
+		Button calendarioAdministrativo = (Button) view.findViewById(R.id.button_evento_atualizarConfirmados);
 
 		calendarioEscolar.setOnClickListener(this);
 		calendarioAdministrativo.setOnClickListener(this);
@@ -41,7 +41,7 @@ public class FragmentCalendario extends Fragment implements  View.OnClickListene
                 Log.i("teste", "botão 1");
                 break;
 
-            case R.id.button2:
+            case R.id.button_evento_atualizarConfirmados:
                 Intent calendarioadm =  new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.calendario_url_adminsitrativo)));
                 startActivity(calendarioadm);
                 Log.i("teste", "botão 2");

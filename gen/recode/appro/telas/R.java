@@ -231,7 +231,7 @@ public final class R {
         public static final int action_pesquisa=0x7f0a003d;
         public static final int action_settings=0x7f0a003c;
         public static final int button1=0x7f0a001d;
-        public static final int button2=0x7f0a001c;
+        public static final int button_evento_atualizarConfirmados =0x7f0a001c;
         public static final int content_frame=0x7f0a0001;
         public static final int drawer_layout=0x7f0a0000;
         public static final int expandableListView_horarios=0x7f0a002b;
@@ -245,11 +245,11 @@ public final class R {
         public static final int listView_generica=0x7f0a0036;
         public static final int listView_pesquisa=0x7f0a0003;
         public static final int textView1=0x7f0a0012;
-        public static final int textView2=0x7f0a0014;
-        public static final int textView3=0x7f0a0026;
-        public static final int textView4=0x7f0a003a;
+        public static final int textView_evento_data_hora =0x7f0a0014;
+        public static final int textView_evento_descricao =0x7f0a0026;
+        public static final int textView_evento_organizadores =0x7f0a003a;
         public static final int textView5=0x7f0a0022;
-        public static final int textView6=0x7f0a0028;
+        public static final int textView_evento_confimados =0x7f0a0028;
         public static final int textView7=0x7f0a0024;
         public static final int textView_curso_coordenacao_coordenador=0x7f0a0027;
         public static final int textView_curso_coordenacao_coordenador_email=0x7f0a0029;

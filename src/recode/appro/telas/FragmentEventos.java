@@ -1,9 +1,14 @@
 package recode.appro.telas;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,7 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListAdapter;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -24,7 +29,6 @@ import recode.appro.model.Evento;
 import recode.appro.model.Noticia;
 
 import android.app.ProgressDialog;
-import android.widget.SimpleAdapter;
 
 import org.apache.http.NameValuePair;
 import org.json.JSONArray;
@@ -35,7 +39,7 @@ import org.json.JSONObject;
 /**
  * Created by eccard on 09/07/14.
  */
-public class FragmentEventos extends Fragment {
+public class FragmentEventos extends Fragment implements AdapterView.OnItemClickListener {
     //    ArrayList<Evento> eventos = new ArrayList<Evento>();
 //    List<Evento> eventos = new ArrayList<Evento>();
     ListView listViewEventos;
@@ -46,7 +50,7 @@ public class FragmentEventos extends Fragment {
     // Creating JSON Parser object
     JSONParser jParser = new JSONParser();
     ArrayList<HashMap<String, String>> eventosList;
-    private static String url_all_eventoss = "http://10.0.0.104/aproWS/eventos/listarultimoseventos.php";
+    private static String url_all_eventoss = "http://10.0.0.102/aproWS/eventos/listarultimoseventos.php";
 
     // JSON Node names
     private static final String TAG_SUCCESSO = "sucesso";
@@ -86,9 +90,26 @@ public class FragmentEventos extends Fragment {
                 .getApplicationContext());
         listViewEventos = (ListView) view.findViewById(R.id.listView_generica);
         listViewEventos.setAdapter(listViewAdapter);
+        listViewEventos.setOnItemClickListener(this);
+
 
     return view;
     }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Log.i("akiii",String.valueOf(position));
+        Evento evento = listViewAdapter.getEventos().get(position);
+
+        Fragment fragmentEvento = new FragmentEvento(evento);
+        FragmentTransaction frgManager = getFragmentManager().beginTransaction();
+        frgManager.replace(R.id.content_frame,fragmentEvento);
+        frgManager.addToBackStack(null);
+        frgManager.commit();
+
+
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
@@ -116,7 +137,8 @@ public class FragmentEventos extends Fragment {
      * Background Async Task to Load all product by making HTTP Request
      * */
     class LoadAllProducts extends AsyncTask<String, String, String> {
-
+        private NotificationManager mNotificationManager;
+        private int numMessages = 0;
         /**
          * Before starting background thread Show Progress Dialog
          * */
@@ -175,9 +197,14 @@ public class FragmentEventos extends Fragment {
                         String data = c.getString(TAG_DATA);
                         String hora = c.getString(TAG_HORA);
 
+                        Evento evento = new Evento(codigo,nome,descricao,organizadores,local,data,hora);
+                        //jogar pro banco de dados
+                        // exibir notificação
+                        controladorEvento = new ControladorEvento(getActivity().getApplicationContext());
+                        controladorEvento.criarEvento(evento);
+                        generateNotification(evento);
 
-                        listaNovosEventos.add(new Evento(codigo,nome,organizadores,descricao,local,data,hora));
-
+                        listaNovosEventos.add(evento);
                         // creating new HashMap
 //                        HashMap<String, String> map = new HashMap<String, String>();
 
@@ -246,6 +273,51 @@ public class FragmentEventos extends Fragment {
 
 
          }
+        public void generateNotification(Evento evento) {
+
+            Log.i("Start", "notification");
+
+      /* Invoking the default notification service */
+            NotificationCompat.Builder  mBuilder =
+                    new NotificationCompat.Builder(getActivity().getApplicationContext());
+
+            mBuilder.setContentTitle("Novo evento");
+            mBuilder.setContentText(evento.getNome());
+            mBuilder.setTicker("Evento !!!");
+            mBuilder.setSmallIcon(R.drawable.logo);
+
+      /* Increase notification number every time a new notification arrives */
+            mBuilder.setNumber(++numMessages);
+
+      /* Creates an explicit intent for an Activity in your app */
+            Intent resultIntent = new Intent(getActivity().getApplicationContext(), NavigationDrawer.class);
+            resultIntent.setAction("EVENTO"); //tentando linkar
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("evento",evento);
+            resultIntent.putExtras(bundle);
+            // fim arrumar a inteçao
+
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(getActivity().getApplicationContext());
+            stackBuilder.addParentStack(NavigationDrawer.class);
+
+      /* Adds the Intent that starts the Activity to the top of the stack */
+            stackBuilder.addNextIntent(resultIntent);
+            PendingIntent resultPendingIntent =
+                    stackBuilder.getPendingIntent(
+                            0,
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                    );
+
+            mBuilder.setContentIntent(resultPendingIntent);
+
+            mNotificationManager =
+//                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    (NotificationManager) getActivity().getApplication().
+                            getSystemService(getActivity().getApplication().NOTIFICATION_SERVICE);
+
+      /* notificationID allows you to update the notification later on. */
+            mNotificationManager.notify(evento.getCodigo(), mBuilder.build());
+        }
 
     }
 
