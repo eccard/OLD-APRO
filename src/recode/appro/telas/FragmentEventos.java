@@ -50,7 +50,7 @@ public class FragmentEventos extends Fragment implements AdapterView.OnItemClick
     // Creating JSON Parser object
     JSONParser jParser = new JSONParser();
     ArrayList<HashMap<String, String>> eventosList;
-    private static String url_all_eventoss = "http://10.0.0.102/aproWS/eventos/listarultimoseventos.php";
+    private static String url_all_eventoss = "http://10.0.0.104/aproWS/eventos/listarultimoseventos.php";
 
     // JSON Node names
     private static final String TAG_SUCCESSO = "sucesso";

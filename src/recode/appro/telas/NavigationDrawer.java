@@ -16,10 +16,13 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 
+import org.c99.SyncProviderDemo.LoginActivity;
+
 import recode.appro.controlador.ControladorEvento;
 import recode.appro.controlador.ControladorNoticia;
 import recode.appro.model.Evento;
 import recode.appro.model.Noticia;
+import recode.appro.persistencia.DataBaseHelper;
 
 public class NavigationDrawer extends FragmentActivity implements
         OnGroupClickListener, OnChildClickListener {
@@ -39,6 +42,17 @@ public class NavigationDrawer extends FragmentActivity implements
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_navigation_drawer);
+        // verificar se já tem usuario caso não tenho um registrar
+        DataBaseHelper dataBaseHelper = new DataBaseHelper(getApplicationContext());
+        dataBaseHelper.abrirDataBase();
+        if(dataBaseHelper.verificarSeExisteUsuario()==0){//se não existe usuario,criar
+           Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
+
+
+        //fim verificar se já tem usuario caso não tenho um registrar
+
 
         // Inicializando itens do Navigation Drawer
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -44,7 +44,7 @@ public class FragmentNoticias extends Fragment implements AdapterView.OnItemClic
     // Creating JSON Parser object
     JSONParser jParser = new JSONParser();
     ArrayList<HashMap<String, String>> eventosList;
-    private static String url_all_noticias = "http://10.0.0.102/aproWS/noticias/listarultimasnoticias.php";
+    private static String url_all_noticias = "http://10.0.0.104/aproWS/noticias/listarultimasnoticias.php";
 
     // JSON Node names
     private static final String TAG_SUCCESSO = "sucesso";
@@ -250,6 +250,7 @@ public class FragmentNoticias extends Fragment implements AdapterView.OnItemClic
             if(listaNovasNoticias!=null) {
                 listViewAdapter.concatenarArrayDeNoticias(listaNovasNoticias);
             }
+//            listaNovasNoticias.clear();
             listViewNoticias.setAdapter(listViewAdapter);
             //for(int i=0;i<eventosList.size();i++){
             //    Log.i("todos",eventosList.get(i).toString());

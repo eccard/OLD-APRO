@@ -29,7 +29,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 //    private static String DB_NAME = "PUROapp_Updated-1.db";
 //    private static String DB_NAME = "PUROapp_Updated-1.1.db";
 //    private static String DB_NAME = "PUROapp_Updated-1.2.db";
-    private static String DB_NAME = "PUROapp_Updated-1.3.db";
+//    private static String DB_NAME = "PUROapp_Updated-1.3.db";
+//    private static String DB_NAME = "PUROapp_Updated-1.4.db";
+    private static String DB_NAME = "PUROapp_Updated-1.5.db";
     public SQLiteDatabase dbQuery;
     private final Context dbContexto;
 
@@ -105,11 +107,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 	}
 
 	public void abrirDataBase() throws SQLException {
-		String myPath = DB_PATH + DB_NAME;
-		dbQuery = SQLiteDatabase.openDatabase(myPath, null,
-				SQLiteDatabase.OPEN_READWRITE);
-		// dbQuery.execSQL("PRAGMA foreign_keys = ON;");
-
+        try {
+            String myPath = DB_PATH + DB_NAME;
+            dbQuery = SQLiteDatabase.openDatabase(myPath, null,
+                    SQLiteDatabase.OPEN_READWRITE);
+            // dbQuery.execSQL("PRAGMA foreign_keys = ON;");
+        }catch (SQLiteException e){
+            Log.e(e.toString(),e.toString());
+        }
 	}
 
 	@Override
@@ -375,27 +380,27 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return cursor.getInt(0);
     }
     public int getCodigoUltimaNoticia(){
-        Cursor cursor = dbQuery.rawQuery("SELECT MAX(codigo) FROM noticias",null);
+        Cursor cursor = dbQuery.rawQuery("SELECT MAX(_id) FROM noticias",null);
         cursor.moveToFirst();
         return cursor.getInt(0);
     }
 
     public int getVisualizarNoticia(int codigo){
         String[] whereArgs = new String[] { String.valueOf(codigo)};
-        Cursor cursor = dbQuery.rawQuery("SELECT visualizar FROM noticias where codigo = ?",whereArgs);
+        Cursor cursor = dbQuery.rawQuery("SELECT visualizar FROM noticias where _id = ?",whereArgs);
         cursor.moveToFirst();
         return cursor.getInt(0);
     }
 
     public void setVisualizarNoticia1(int codigo){
-        dbQuery.execSQL("UPDATE noticias SET visualizar = '1' where codigo =" + String.valueOf(codigo));
+        dbQuery.execSQL("UPDATE noticias SET visualizar = '1' where _id =" + String.valueOf(codigo));
     }
     public void criatNoticia(Noticia noticia){
           Log.i("entrando no criarção da noticia","entrando criação noticiaaaaaaaaaaaaaaaa");
         this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put("codigo",noticia.getCodigo());
+        values.put("_id",noticia.getCodigo());
         values.put("assunto",noticia.getAssunto());
         values.put("dataExpedida",noticia.getDataexpedida());
         values.put("horaExpedida",noticia.getHoraexpedida());
@@ -427,6 +432,16 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }catch (SQLException e){
             Log.i(e.toString(),e.toString());
         }
+    }
+
+    public int verificarSeExisteUsuario(){
+        Cursor cursor = dbQuery.rawQuery("SELECT COUNT(*) FROM usuario ",null);
+//        cursor.moveToFirst();
+        cursor.moveToFirst();
+        int cont = cursor.getInt(0);
+        cursor.close();
+        return cont;
+
     }
 
 	/*
