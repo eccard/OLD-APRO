@@ -78,7 +78,7 @@ public class FragmentNoticias extends Fragment implements AdapterView.OnItemClic
 //        noticiasList = new ArrayList<HashMap<String, String>>();
 
         // Loading products in Background Thread
-        new LoadAllProducts().execute();
+//        new LoadAllProducts().execute();
 
 
         listViewAdapter = new AdapterItemNoticias(getActivity()

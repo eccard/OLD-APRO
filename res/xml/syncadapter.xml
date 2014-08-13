@@ -1,8 +1,0 @@
-<sync-adapter
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:contentAuthority="com.apro.provider"
-    android:accountType="com.sportsteamkarma"
-    android:userVisible="false"
-    android:supportsUploading="false"
-    android:allowParallelSyncs="false"
-    android:isAlwaysSyncable="true"/>

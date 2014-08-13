@@ -13,12 +13,13 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
 import java.util.HashMap;
-/**
- * Created by eccard on 7/28/14.
- */
-public class NoticiasProvider extends ContentProvider {
 
-    static final String PROVIDER_NAME = "com.example.contentproviderexample.NoticiaProvider";
+/**
+ * Created by eccard on 8/11/14.
+ */
+public class EventoProvider extends ContentProvider {
+
+    static final String PROVIDER_NAME = "com.example.contentproviderexample.EventoProvider";
     static final String URL = "content://" + PROVIDER_NAME + "/cte";
     static final Uri CONTENT_URI = Uri.parse(URL);
 
@@ -118,17 +119,17 @@ public class NoticiasProvider extends ContentProvider {
 
     private SQLiteDatabase db;
     static final String DATABASE_NAME = "PUROapp_Updated-1.6";
-    static final String TABLE_NAME = "noticias";
+    static final String TABLE_NAME = "evento";
     static final int DATABASE_VERSION = 1;
     static final String CREATE_DB_TABLE = " CREATE TABLE " + TABLE_NAME
             + " (_id INTEGER NOT NULL, "
-            + " assunto VARCHAR(41), "
-            + " dataExpedida VARCHAR(11), "
-            + " horaExpedida VARCHAR(11), "
-            + " cursoRelacionado INT, "
-            + " descricao VARCHAR(300), "
-            +" visualizar INTEGER NOT NULL DEFAULT (0))";
-
+            + " nome TEXT NOT NULL, "
+            + " descricao TEXT NOT NULL, "
+            + " organizadores TEXT NOT NULL,"
+            + " local TEXT NOT NULL,"
+            + " data TEXT NOT NULL,"
+            + " hora TEXT NOT NULL, "
+            + " presenca INTEGER NOT NULL DEFAULT (0))";
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
         DatabaseHelper(Context context) {

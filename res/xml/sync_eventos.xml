@@ -12,11 +12,13 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
+    android:contentAuthority="com.android.contacts"
+    android:userVisible="true"
 -->
 <sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
-    android:contentAuthority="recode.appro.provider.NoticiaProvider"
+    android:contentAuthority="recode.appro.provider.EventoProvider"
     android:accountType="org.c99.SyncProviderDemo.account"
     android:supportsUploading="false"
     android:isAlwaysSyncable="true"
-
-/> 
+    android:userVisible="true"
+    />

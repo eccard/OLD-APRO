@@ -15,11 +15,6 @@
  ******************************************************************************/
 package org.c99.SyncProviderDemo;
 
-import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import android.accounts.Account;
 import android.accounts.OperationCanceledException;
 import android.app.NotificationManager;
@@ -34,9 +29,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SyncResult;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -48,16 +40,22 @@ import android.provider.ContactsContract.RawContacts.Entity;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
+import android.widget.ListView;
 
 import org.apache.http.NameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import recode.appro.conexao.JSONParser;
+import recode.appro.controlador.ControladorEvento;
 import recode.appro.controlador.ControladorNoticia;
+import recode.appro.model.Evento;
 import recode.appro.model.Noticia;
-import recode.appro.telas.AdapterItemNoticias;
+import recode.appro.telas.AdapterItemEventos;
 import recode.appro.telas.NavigationDrawer;
 import recode.appro.telas.R;
 
@@ -65,7 +63,7 @@ import recode.appro.telas.R;
  * @author sam
  * 
  */
-public class ContactsSyncAdapterService extends Service {
+public class EventosSyncAdapterService extends Service {
 	private static final String TAG = "ContactsSyncAdapterService";
 	private static SyncAdapterImpl sSyncAdapter = null;
 	private static ContentResolver mContentResolver = null;
@@ -75,7 +73,7 @@ public class ContactsSyncAdapterService extends Service {
     // sync variaveis
     // end sync variaveis
 
-	public ContactsSyncAdapterService() {
+	public EventosSyncAdapterService() {
 		super();
 	}
 
@@ -90,7 +88,7 @@ public class ContactsSyncAdapterService extends Service {
 		@Override
 		public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
 			try {
-				ContactsSyncAdapterService.performSync(mContext, account, extras, authority, provider, syncResult);
+				EventosSyncAdapterService.performSync(mContext, account, extras, authority, provider, syncResult);
 			} catch (OperationCanceledException e) {
 			}
 		}
@@ -208,8 +206,8 @@ public class ContactsSyncAdapterService extends Service {
 
 	private static void performSync(Context context, Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult)
 			throws OperationCanceledException {
-        Log.i("akiiiiiiiiiiiiii","sinncronizaandoooo");
-        syncNoticias(provider,context);
+        Log.i("akiiiiiiiiiiiiii","sinncronizaandoooo -- eventos");
+        syncEvetntos(provider,context);
 
 
 
@@ -252,38 +250,39 @@ public class ContactsSyncAdapterService extends Service {
 //		}
 
     }
-    private static void syncNoticias(ContentProviderClient contentProviderClient,Context context){
-
-//        AdapterItemNoticias listViewAdapter = new AdapterItemNoticias(context);
+    private static void syncEvetntos(ContentProviderClient contentProviderClient,Context context){
+        ListView listViewEventos;
+        AdapterItemEventos listViewAdapter;
 
         JSONParser jParser = new JSONParser();
-        // products JSONArray
-        JSONArray jnoticias = null;
-        // eventos novos vindo do servidos
-        ArrayList<Noticia> listaNovasNoticias;
 
+        // products JSONArray
+        JSONArray jeventos = null;
+        // eventos novos vindo do servidos
+        ArrayList<Evento> listaNovosEventos;
 
         // JSON Node names
         final String TAG_SUCCESSO = "sucesso";
-        final String TAG_NOTICIAS = "noticias";
+        final String TAG_EVENTOS = "eventos";
         final String TAG_CODIGO = "codigo";
-        final String TAG_ASSUNTO = "assunto";
+        final String TAG_NOME = "nome";
+        final String TAG_ORGANIZADORES = "organizadores";
         final String TAG_DESCRICAO = "descricao";
+        final String TAG_LOCAL = "local";
         final String TAG_DATA = "data";
         final String TAG_HORA = "hora";
-        final String TAG_CURSORELACIONADO = "cursoRelacionado";
-        final String url_all_noticias = "http://10.0.0.103/aproWS/noticias/listarultimasnoticias.php";
 
+        final String url_all_eventoss = "http://10.0.0.103/aproWS/eventos/listarultimoseventos.php";
 
-        ControladorNoticia controladorNoticia = new ControladorNoticia(context);
-        int codigoultimoNoticia = controladorNoticia.getCodigoUltimaNoticia();
-//            Log.i("pegar o ultimo evento",String.valueOf(codigoultimoNoticia));
-//        controladorNoticia = null;
+        ControladorEvento controladorEvento = new ControladorEvento(context);
+        int codigoultimoevento = controladorEvento.getCodigoUltimoEvento();
+        Log.i("pegar o ultimo evento",String.valueOf(codigoultimoevento));
+        controladorEvento = null;
 
         // Building Parameters
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         // getting JSON string from URL
-        JSONObject json = jParser.makeHttpRequest(url_all_noticias + "?codigo=" + String.valueOf(codigoultimoNoticia), "GET",params);
+        JSONObject json = jParser.makeHttpRequest(url_all_eventoss + "?codigo=" + String.valueOf(codigoultimoevento), "GET",params);
 
         // Check your log cat for JSON reponse
         Log.d("All Products: ", json.toString());
@@ -296,46 +295,62 @@ public class ContactsSyncAdapterService extends Service {
                 // products found
                 // Getting Array of Products
 //                    Log.i("json de eventos array",json.toString());
-                jnoticias = json.getJSONArray(TAG_NOTICIAS);
-                listaNovasNoticias = new ArrayList<Noticia>();
+                jeventos = json.getJSONArray(TAG_EVENTOS);
+                listaNovosEventos = new ArrayList<Evento>();
                 // looping through All Products
-                for (int i = 0; i < jnoticias.length(); i++) {
-                    JSONObject c = jnoticias.getJSONObject(i);
+                for (int i = 0; i < jeventos.length(); i++) {
+                    JSONObject c = jeventos.getJSONObject(i);
 
                     // Storing each json item in variable
                     int codigo = c.getInt(TAG_CODIGO);
-                    String assunto = c.getString(TAG_ASSUNTO);
+                    String nome = c.getString(TAG_NOME);
+                    String organizadores = c.getString(TAG_ORGANIZADORES);
                     String descricao = c.getString(TAG_DESCRICAO);
+                    String local = c.getString(TAG_LOCAL);
                     String data = c.getString(TAG_DATA);
                     String hora = c.getString(TAG_HORA);
-                    int curoRelacionado = c.getInt(TAG_CURSORELACIONADO);
 
-                    Noticia noticia = new Noticia(codigo, assunto, data, hora, curoRelacionado, descricao);
+                    Evento evento = new Evento(codigo,nome,descricao,organizadores,local,data,hora);
                     //jogar pro banco de dados
                     // exibir notificação
+                    controladorEvento = new ControladorEvento(context);
+                    controladorEvento.criarEvento(evento);
+                    generateNotification(evento,context);
 
-                    controladorNoticia.criarNoticia(noticia);
+//                    listaNovosEventos.add(evento); //acho q nem precisa
+                    // creating new HashMap
+//                        HashMap<String, String> map = new HashMap<String, String>();
 
-                    generateNotification(noticia,context);
+                    // adding each child node to HashMap key => value
+//                        map.put(TAG_CODIGO, codigo);
+//                        map.put(TAG_NOME, nome);
 
-//                    listaNovasNoticias.add(noticia);
+                    // adding HashList to ArrayList
+//                        eventosList.add(map);
+
+//                        Log.i("passou aki",eventosList.get(i).toString());
                 }
+            } else {
+                Log.i("passou aki zeroo ","teste");
 
-//                if(listaNovasNoticias!=null) {
-//                    listViewAdapter.concatenarArrayDeNoticias(listaNovasNoticias);
-//                    eu acho q não precisa disso pos vai atualizar e gravar no banco
-//                    quando entrar na tela noticia atualiza..
-//                    listViewAdapter.concatenarArrayDeNoticias(listaNovasNoticias);
-//                }
-//                listaNovasNoticias.clear();
-
+                    /*
+                    // no products found
+                    // Launch Add New product Activity
+                    Intent i = new Intent(getApplicationContext(),
+                            NewProductActivity.class);
+                    // Closing all previous activities
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+                */
             }
-        }catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
+
+
     }
-    private static void generateNotification(Noticia noticia,Context context) {
+    private static void generateNotification(Evento evento,Context context) {
         NotificationManager mNotificationManager;
         int numMessages = 0;
         Log.i("Start", "notification");
@@ -344,9 +359,9 @@ public class ContactsSyncAdapterService extends Service {
         NotificationCompat.Builder  mBuilder =
                 new NotificationCompat.Builder(context);
 
-        mBuilder.setContentTitle("Nova noticia");
-        mBuilder.setContentText(noticia.getAssunto());
-        mBuilder.setTicker("Noticia !!!");
+        mBuilder.setContentTitle("Novo evento");
+        mBuilder.setContentText(evento.getNome());
+        mBuilder.setTicker("Evento !!!");
         mBuilder.setSmallIcon(R.drawable.logo);
 
       /* Increase notification number every time a new notification arrives */
@@ -354,10 +369,9 @@ public class ContactsSyncAdapterService extends Service {
 
       /* Creates an explicit intent for an Activity in your app */
         Intent resultIntent = new Intent(context, NavigationDrawer.class);
-
-        resultIntent.setAction("NOTICIA"); //tentando linkar
+        resultIntent.setAction("EVENTO"); //tentando linkar
         Bundle bundle = new Bundle();
-        bundle.putSerializable("noticia",noticia);
+        bundle.putSerializable("evento",evento);
         resultIntent.putExtras(bundle);
         // fim arrumar a inteçao
 
@@ -378,10 +392,12 @@ public class ContactsSyncAdapterService extends Service {
 //                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 //                (NotificationManager) getActivity().getApplication().
 //                        getSystemService(getActivity().getApplication().NOTIFICATION_SERVICE);
-//                (NotificationManager) getContext().getSystemService(getContext().NOTIFICATION_SERVICE);
-//                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+
       /* notificationID allows you to update the notification later on. */
-        mNotificationManager.notify(noticia.getCodigo(), mBuilder.build());
+//                (NotificationManager) getApplication().getSystemService(NOTIFICATION_SERVICE);
+                (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+        mNotificationManager.notify(evento.getCodigo(), mBuilder.build());
     }
+
+
 }

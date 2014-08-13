@@ -31,7 +31,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 //    private static String DB_NAME = "PUROapp_Updated-1.2.db";
 //    private static String DB_NAME = "PUROapp_Updated-1.3.db";
 //    private static String DB_NAME = "PUROapp_Updated-1.4.db";
-    private static String DB_NAME = "PUROapp_Updated-1.5.db";
+//    private static String DB_NAME = "PUROapp_Updated-1.5.db";
+    private static String DB_NAME = "PUROapp_Updated-1.6.db";
     public SQLiteDatabase dbQuery;
     private final Context dbContexto;
 
@@ -375,7 +376,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		}
 
     public int getCodigoUltimoEvento(){
-        Cursor cursor = dbQuery.rawQuery("SELECT MAX(cod) FROM evento",null);
+//        Cursor cursor = dbQuery.rawQuery("SELECT MAX(cod) FROM evento",null);
+        Cursor cursor = dbQuery.rawQuery("SELECT MAX(_id) FROM evento",null);
         cursor.moveToFirst();
         return cursor.getInt(0);
     }
@@ -419,7 +421,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put("cod",evento.getCodigo());
+//        values.put("cod",evento.getCodigo());
+        values.put("_id",evento.getCodigo());
         values.put("nome",evento.getNome());
         values.put("descricao",evento.getDescricao());
         values.put("organizadores",evento.getOrganizadores());
@@ -443,7 +446,19 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return cont;
 
     }
+    public void criarUsuario(String nick,int matricula){
+        this.getWritableDatabase();
 
+        ContentValues values = new ContentValues();
+        values.put("nome",nick);
+        values.put("matricula",matricula);
+
+        try{
+            dbQuery.insert("usuario",null,values);
+        }catch (SQLException e){
+            Log.i(e.toString(),e.toString());
+        }
+    }
 	/*
 	 * public ArrayList<Noticia> getSpecificNoticias(int codigoNoticia) {
 	 * 

@@ -19,6 +19,7 @@ import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,11 +28,12 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
+import recode.appro.controlador.ControladorUsuario;
 import recode.appro.telas.R;
 
 public class LoginActivity extends AccountAuthenticatorActivity {
-	EditText mUsername;
-	EditText mPassword;
+	EditText mNick;
+	EditText mMatricula;
 	Button mLoginButton;
 
 	/** Called when the activity is first created. */
@@ -40,20 +42,22 @@ public class LoginActivity extends AccountAuthenticatorActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		mUsername = (EditText) findViewById(R.id.username);
-		mPassword = (EditText) findViewById(R.id.password);
+		mNick = (EditText) findViewById(R.id.username);
+		mMatricula = (EditText) findViewById(R.id.password);
 
 		mLoginButton = (Button) findViewById(R.id.login);
 		mLoginButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				String user = mUsername.getText().toString().trim().toLowerCase();
-				String password = mPassword.getText().toString().trim().toLowerCase();
+				String nick = mNick.getText().toString().trim().toLowerCase();
+				String matricula = mMatricula.getText().toString().trim().toLowerCase();
 
-				if (user.length() > 0 && password.length() > 0) {
+				if (nick.length() > 0 && matricula.length() > 0) {
 					LoginTask t = new LoginTask(LoginActivity.this);
-					t.execute(user, password);
-				}
+					t.execute(nick,matricula);
+                    ControladorUsuario controladorUsuario = new ControladorUsuario(getApplicationContext());
+                    controladorUsuario.criarUsuario(nick,Integer.valueOf(matricula));
+                }
 			}
 
 		});
@@ -73,8 +77,8 @@ public class LoginActivity extends AccountAuthenticatorActivity {
 
 		@Override
 		public Boolean doInBackground(String... params) {
-			String user = params[0];
-			String pass = params[1];
+			String nick = params[0];
+			String matricula = params[1];
 
 			// Do something internetty
 			try {
@@ -85,12 +89,13 @@ public class LoginActivity extends AccountAuthenticatorActivity {
 			}
 
 			Bundle result = null;
-			Account account = new Account(user, mContext.getString(R.string.ACCOUNT_TYPE));
+			Account account = new Account(nick, mContext.getString(R.string.ACCOUNT_TYPE));
 			AccountManager am = AccountManager.get(mContext);
-			if (am.addAccountExplicitly(account, pass, null)) {
+			if (am.addAccountExplicitly(account, matricula, null)) {
 				result = new Bundle();
 				result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
 				result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
+                ContentResolver.setIsSyncable(account,"evetos",1);
 				setAccountAuthenticatorResult(result);
 				return true;
 			} else {
@@ -102,6 +107,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
 		public void onPostExecute(Boolean result) {
 			mLoginButton.setEnabled(true);
 			mDialog.dismiss();
+
 			if (result)
 				finish();
 		}

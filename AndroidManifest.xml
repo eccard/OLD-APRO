@@ -62,16 +62,48 @@
             <meta-data android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator"/>
         </service>
-        <service android:name="org.c99.SyncProviderDemo.ContactsSyncAdapterService"
-            android:exported="true" android:process=":contacts">
+
+        <provider
+            android:name="recode.appro.provider.NoticiasProvider"
+            android:authorities="recode.appro.provider.NoticiaProvider"
+            android:exported="true"
+            android:multiprocess="true"
+            android:label="Noticias"
+            >
+        </provider>
+        <service android:name="org.c99.SyncProviderDemo.NoticiasSyncAdapterService"
+            android:exported="true" android:process=":sync">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter"/>
             </intent-filter>
             <meta-data android:name="android.content.SyncAdapter"
                 android:resource="@xml/sync_contacts"/>
-            <meta-data android:name="android.provider.CONTACTS_STRUCTURE"
-                android:resource="@xml/contacts"/>
         </service>
+
+
+        <provider
+            android:name="recode.appro.provider.EventoProvider"
+            android:authorities="recode.appro.provider.EventoProvider"
+            android:exported="true"
+            android:multiprocess="true"
+            android:label="Eventos"
+            >
+        </provider>
+
+
+
+        <service android:name="org.c99.SyncProviderDemo.EventosSyncAdapterService"
+            android:exported="true"
+            android:process=":sync"
+            >
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter"/>
+            </intent-filter>
+            <meta-data android:name="android.content.SyncAdapter"
+                android:resource="@xml/sync_eventos"
+                />
+        </service>
+
 
 
     </application>
@@ -86,11 +118,6 @@
         <!--<meta-data android:name="android.content.SyncAdapter"-->
         <!--android:resource="@xml/syncadapter" />-->
     <!--</service>-->
-    <!--<provider-->
-        <!--android:name="recode.appro.provider.NoticiasProvider"-->
-        <!--android:authorities="recode.appro.provider.NoticiasProvider"-->
-        <!--android:exported="false"-->
-        <!--android:syncable="true"/>-->
 
 
     <!--<service android:name="recode.appro.services.AccountAuthenticatorService"-->

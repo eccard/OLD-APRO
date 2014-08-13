@@ -15,11 +15,6 @@
  ******************************************************************************/
 package org.c99.SyncProviderDemo;
 
-import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import android.accounts.Account;
 import android.accounts.OperationCanceledException;
 import android.app.NotificationManager;
@@ -34,9 +29,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SyncResult;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -54,10 +46,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import recode.appro.conexao.JSONParser;
 import recode.appro.controlador.ControladorNoticia;
 import recode.appro.model.Noticia;
-import recode.appro.telas.AdapterItemNoticias;
 import recode.appro.telas.NavigationDrawer;
 import recode.appro.telas.R;
 
@@ -65,8 +59,8 @@ import recode.appro.telas.R;
  * @author sam
  * 
  */
-public class ContactsSyncAdapterService extends Service {
-	private static final String TAG = "ContactsSyncAdapterService";
+public class NoticiasSyncAdapterService extends Service {
+	private static final String TAG = "NoticiasSyncAdapterService";
 	private static SyncAdapterImpl sSyncAdapter = null;
 	private static ContentResolver mContentResolver = null;
 	private static String UsernameColumn = RawContacts.SYNC1;
@@ -75,7 +69,7 @@ public class ContactsSyncAdapterService extends Service {
     // sync variaveis
     // end sync variaveis
 
-	public ContactsSyncAdapterService() {
+	public NoticiasSyncAdapterService() {
 		super();
 	}
 
@@ -90,7 +84,7 @@ public class ContactsSyncAdapterService extends Service {
 		@Override
 		public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
 			try {
-				ContactsSyncAdapterService.performSync(mContext, account, extras, authority, provider, syncResult);
+				NoticiasSyncAdapterService.performSync(mContext, account, extras, authority, provider, syncResult);
 			} catch (OperationCanceledException e) {
 			}
 		}
