@@ -47,8 +47,12 @@ public class ControladorUsuario {
         abrirBanco();
         return dataBaseHelper.verificarSeExisteUsuario();
     }
-    public void criarUsuario(String nick,int matricula){
+    public void criarUsuario(String nick,int estudante,int codCurso,int periodo){
         abrirBanco();
-        dataBaseHelper.criarUsuario(nick, matricula);
+        dataBaseHelper.criarUsuario(nick,estudante,codCurso,periodo);
+    }
+    public void criarUsuario2(String nick,int estudante){
+        abrirBanco();
+        dataBaseHelper.criarUsuario2(nick,estudante);
     }
 }

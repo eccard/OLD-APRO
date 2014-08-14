@@ -78,7 +78,8 @@
     <string name="ACCOUNT_TYPE">org.c99.SyncProviderDemo.account</string>
     <string name="nick">Nick:</string>
     <string name="username_hint">efudd</string>
-    <string name="matricula">Matricula:</string>
+    <string name="curso">Curso:</string>
+    <string name="categoria">Categoria:</string>
     <string name="password_hint">w4bb1ts!</string>
     <string name="login">Login</string>
     <string name="authenticating">Authenticating</string>

@@ -32,7 +32,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 //    private static String DB_NAME = "PUROapp_Updated-1.3.db";
 //    private static String DB_NAME = "PUROapp_Updated-1.4.db";
 //    private static String DB_NAME = "PUROapp_Updated-1.5.db";
-    private static String DB_NAME = "PUROapp_Updated-1.6.db";
+//    private static String DB_NAME = "PUROapp_Updated-1.6.db";
+    private static String DB_NAME = "PUROapp_Updated-1.7.db";
     public SQLiteDatabase dbQuery;
     private final Context dbContexto;
 
@@ -446,12 +447,27 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return cont;
 
     }
-    public void criarUsuario(String nick,int matricula){
+    public void criarUsuario(String nick,int estudante,int codCurso,int periodo){
         this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put("nome",nick);
-        values.put("matricula",matricula);
+        values.put("nick",nick);
+        values.put("estudante",estudante);
+        values.put("curso",codCurso);
+        values.put("periodo",periodo);
+
+        try{
+            dbQuery.insert("usuario",null,values);
+        }catch (SQLException e){
+            Log.i(e.toString(),e.toString());
+        }
+    }
+    public void criarUsuario2(String nick,int estudante){
+        this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("nick",nick);
+        values.put("estudante",estudante);
 
         try{
             dbQuery.insert("usuario",null,values);
