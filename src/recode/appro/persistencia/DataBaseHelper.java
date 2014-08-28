@@ -447,13 +447,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return cont;
 
     }
-    public void criarUsuario(String nick,int estudante,int codCurso,int periodo){
+    public void criarUsuarioAluno(String nick,String curso,int periodo){
         this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put("nick",nick);
-        values.put("estudante",estudante);
-        values.put("curso",codCurso);
+        values.put("estudante","1");
+        values.put("curso",curso);
         values.put("periodo",periodo);
 
         try{
@@ -462,12 +462,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             Log.i(e.toString(),e.toString());
         }
     }
-    public void criarUsuario2(String nick,int estudante){
+    public void criarUsuarioPT(String nick){
         this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put("nick",nick);
-        values.put("estudante",estudante);
+        values.put("estudante","0");
+        values.put("curso","");
+        values.put("periodo","");
 
         try{
             dbQuery.insert("usuario",null,values);

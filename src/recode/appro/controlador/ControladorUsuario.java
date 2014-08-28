@@ -47,12 +47,52 @@ public class ControladorUsuario {
         abrirBanco();
         return dataBaseHelper.verificarSeExisteUsuario();
     }
-    public void criarUsuario(String nick,int estudante,int codCurso,int periodo){
+    public void criarUsuarioAluno(String nick,String curso,int periodo){
         abrirBanco();
-        dataBaseHelper.criarUsuario(nick,estudante,codCurso,periodo);
+        dataBaseHelper.criarUsuarioAluno(nick,curso,periodo);
     }
-    public void criarUsuario2(String nick,int estudante){
+    public void criarUsuarioPT(String nick){
         abrirBanco();
-        dataBaseHelper.criarUsuario2(nick,estudante);
+        dataBaseHelper.criarUsuarioPT(nick);
     }
+
+
+//    public void criarUsuario2(String nick,String tipoUsuario,String cursoUsuario,int periodoAluno){
+//        int codUsuario=0;
+//        int codCurso=0;
+//        if (tipoUsuario.equalsIgnoreCase("Aluno")){
+//            codUsuario=1;
+//        }
+//        else
+//        if(tipoUsuario.equalsIgnoreCase("Professor,tecnico")){
+//            codUsuario=0;
+//        }
+//
+//        if(cursoUsuario.equalsIgnoreCase("Ciência da Computação")){
+//
+//        }
+//        else
+//        if(cursoUsuario.equalsIgnoreCase("Enfermagem")){
+//
+//        }
+//        else
+//        if(cursoUsuario.equalsIgnoreCase("Engenharia de Produção")){
+//
+//        }
+//        else
+//        if(cursoUsuario.equalsIgnoreCase("Produção Cultural")){
+//
+//        }
+//        else
+//        if(cursoUsuario.equalsIgnoreCase("Psicologia")){
+//
+//        }
+//        else
+//        if(cursoUsuario.equalsIgnoreCase("Serviço Social")){
+//
+//        }
+
+//        abrirBanco();
+//        dataBaseHelper.criarUsuario(nick,codUsuario,cursoUsuario,periodoAluno);
+//    }
 }

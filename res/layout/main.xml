@@ -41,19 +41,23 @@
             android:id="@+id/check_button_Aluno"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:text="Aluno">
+            android:text="Aluno"
+            android:onClick="onRadioButtonClicked">
 
         </RadioButton>
         <RadioButton
             android:id="@+id/check_button_Professor_tecnico"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:text="Professor, tecnico">
+            android:text="Professor, tecnico"
+            android:onClick="onRadioButtonClicked">
         </RadioButton>
 
     </RadioGroup>
 
-    <TextView android:layout_width="fill_parent"
+    <TextView
+        android:id="@+id/textViewCursoLoginActivity"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/curso"/>
     <RadioGroup
@@ -103,7 +107,9 @@
 
     </RadioGroup>
 
-    <TextView android:layout_width="fill_parent"
+    <TextView
+        android:id="@+id/textViewPeriodoLoginActivity"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Periodo"/>
 

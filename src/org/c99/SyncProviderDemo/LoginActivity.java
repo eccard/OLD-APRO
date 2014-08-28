@@ -29,6 +29,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -37,18 +38,23 @@ import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import recode.appro.controlador.ControladorUsuario;
 import recode.appro.telas.R;
 
-public class LoginActivity extends AccountAuthenticatorActivity {
+public class LoginActivity extends AccountAuthenticatorActivity implements AdapterView.OnItemSelectedListener {
 	EditText mNick;
 	Button mLoginButton;
     RadioGroup radioGroupTipoUsuario;
     RadioGroup radioGroupCurso;
     Spinner periodo;
+    TextView textViewcurso;
+    TextView textViewperiodo;
+
+    int periodoAluno;
     ArrayList<String> s;
 
 //    final NumberPicker np;
@@ -59,12 +65,17 @@ public class LoginActivity extends AccountAuthenticatorActivity {
 		setContentView(R.layout.main);
 
 		mNick = (EditText) findViewById(R.id.nick);
+        textViewcurso = (TextView) findViewById(R.id.textViewCursoLoginActivity);
+        textViewperiodo = (TextView) findViewById(R.id.textViewPeriodoLoginActivity);
+
         radioGroupTipoUsuario = (RadioGroup) findViewById(R.id.radiongroup_tipo_usuario);
         radioGroupCurso = (RadioGroup) findViewById(R.id.radiobutton_loggin_curso);
         periodo = (Spinner) findViewById(R.id.spinner);
-        s=carregaNumeros();
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,s);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.cursos_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         periodo.setAdapter(adapter);
+        periodo.setOnItemSelectedListener(this);
 
 		mLoginButton = (Button) findViewById(R.id.login);
         mLoginButton.setOnClickListener(new OnClickListener() {
@@ -78,41 +89,68 @@ public class LoginActivity extends AccountAuthenticatorActivity {
 
                     int selectdTipoUsuario = radioGroupTipoUsuario.getCheckedRadioButtonId();
                     int selectdCursoUsuario = radioGroupCurso.getCheckedRadioButtonId();
-                    RadioButton b = (RadioButton) findViewById(selectdTipoUsuario);
-                    RadioButton b2 = (RadioButton) findViewById(selectdCursoUsuario);
+                    RadioButton tipoUsuario = (RadioButton) findViewById(selectdTipoUsuario);
+                    RadioButton cursoUsuario = (RadioButton) findViewById(selectdCursoUsuario);
 
-                    b.getText();
-                    b2.getText();
+                    tipoUsuario.getText();
+                    cursoUsuario.getText();
+//                    periodoAluno
+
+                    Log.i("mensagem",nick);
+                    Log.i("mensagem",cursoUsuario.getText().toString());
+                    Log.i("mensagem",String.valueOf(periodoAluno));
 
                     ControladorUsuario controladorUsuario = new ControladorUsuario(getApplicationContext());
-                    controladorUsuario.criarUsuario2(nick, 0);
+                    if(tipoUsuario.toString().equalsIgnoreCase("Aluno")){
+                    controladorUsuario.criarUsuarioAluno(nick,cursoUsuario.getText().toString(),periodoAluno);
+                    }
+                    else{
+                        controladorUsuario.criarUsuarioPT(nick);
+                    }
+
                 }
 			}
 
 		});
 	}
 
-    public ArrayList<String> carregaNumeros (){
-        ArrayList<String> aux = new ArrayList<String>();
-        aux.add("1");
-        aux.add("2");
-        aux.add("3");
-        aux.add("4");
-        aux.add("5");
-        aux.add("6");
-        aux.add("7");
-        aux.add("8");
-        aux.add("9");
-        aux.add("10");
-        aux.add("11");
-        aux.add("12");
-        aux.add("13");
-        aux.add("14");
-        aux.add("15");
-        return aux;
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        periodoAluno= Integer.valueOf(parent.getItemAtPosition(position).toString());
     }
 
-	private class LoginTask extends AsyncTask<String, Void, Boolean> {
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+    public void onRadioButtonClicked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.check_button_Professor_tecnico:
+                if (checked)
+                textViewcurso.setVisibility(View.INVISIBLE);
+                radioGroupCurso.setVisibility(View.INVISIBLE);
+                textViewperiodo.setVisibility(View.INVISIBLE);
+                periodo.setVisibility(View.INVISIBLE);
+                // Pirates are the best
+                break;
+            case R.id.check_button_Aluno:
+                if(checked)
+                textViewcurso.setVisibility(View.VISIBLE);
+                radioGroupCurso.setVisibility(View.VISIBLE);
+                textViewperiodo.setVisibility(View.VISIBLE);
+                periodo.setVisibility(View.VISIBLE);
+
+                break;
+        }
+    }
+
+
+    private class LoginTask extends AsyncTask<String, Void, Boolean> {
 		Context mContext;
 		ProgressDialog mDialog;
 
